@@ -1,25 +1,37 @@
 'use strict';
 
-const logo = document.querySelector('.logo');
+const successMessage = () => {
+  const message = document.createElement('div');
 
-// eslint-disable-next-line no-new
-new Promise((resolve) => {
-  resolve(
-    logo.insertAdjacentHTML(
-      'beforeend',
-      '<div class="message">Promise was resolved!</>',
-    ),
-  );
+  message.className = 'message';
+  message.innerText = 'Promise was resolved!';
+
+  return document.body.append(message);
+};
+
+const errorMessage = () => {
+  const message = document.createElement('div');
+
+  message.className = 'message error-message';
+  message.innerText = 'Promise was rejected!';
+
+  return document.body.append(message);
+};
+
+const promise1 = new Promise((resolve) => {
+  const logo = document.querySelector('.logo');
+
+  logo.addEventListener('click', () => {
+    resolve();
+  });
 });
 
-// eslint-disable-next-line promise/param-names, no-new
-new Promise((regect) => {
+const promise2 = new Promise((resolve, reject) => {
   setTimeout(() => {
-    regect(
-      logo.insertAdjacentHTML(
-        'beforeend',
-        '<div class="message error-message">Promise was rejected!</>',
-      ),
-    );
+    reject(new Error());
   }, 3000);
 });
+
+promise1.then(successMessage).catch(errorMessage);
+
+promise2.then(successMessage).catch(errorMessage);
